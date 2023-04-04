@@ -1,17 +1,21 @@
-deska = """
-|   |    |12|11|10| 9| 8| 7|    | 6| 5| 4| 3| 2| 1|    |   |
-|   |    | O|  |  |  | X|  |    | X|  |  |  | O|  |    |   |
-|   |    | O|  |  |  | X|  |    | X|  |  |  | O|  |    |   |
-|   |    | O|  |  |  | X|  |    | X|  |  |  |  |  |    |   |
-|   |    | O|  |  |  |  |  |    | X|  |  |  |  |  |    |   |
-|   |    | O|  |  |  |  |  |    | X|  |  |  |  |  |    |   |
-|   |    |  |  |  |  |  |  |    |  |  |  |  |  |  |    |   |
-|   |    |  |  |  |  |  |  |    |  |  |  |  |  |  |    |   |
-|   |    | X|  |  |  |  |  |    | O|  |  |  |  |  |    |   |
-|   |    | X|  |  |  |  |  |    | O|  |  |  |  |  |    |   |
-|   |    | X|  |  |  | O|  |    | O|  |  |  |  |  |    |   |
-|   |    | X|  |  |  | O|  |    | O|  |  |  | X|  |    |   |
-|   |    | X|  |  |  | O|  |    | O|  |  |  | X|  |    |   |
-|   |    |13|14|15|16|17|18|    |19|20|21|22|23|24|    |   |
-"""
-print(deska)
+import pygame
+
+window = pygame.display.set_mode((800,600))
+pozadi = pygame.image.load("bg.png")
+body = []
+
+class Okno:
+    pygame.init()
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                body.append(pygame.mouse.get_pos())              
+        for bod in body:
+            
+            window.blit(pozadi, (0, 0))
+            pygame.draw.circle(window, (0, 0, 0), (bod), 20)
+            pygame.display.flip()
+Okno
