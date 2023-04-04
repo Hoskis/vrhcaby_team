@@ -3,7 +3,7 @@ import pygame
 window = pygame.display.set_mode((800,600))
 pozadi = pygame.image.load("bg.png")
 body = []
-
+window.blit(pozadi, (0, 0))
 class Okno:
     pygame.init()
     running = True
@@ -15,7 +15,8 @@ class Okno:
                 body.append(pygame.mouse.get_pos())              
         for bod in body:
             
-            window.blit(pozadi, (0, 0))
             pygame.draw.circle(window, (0, 0, 0), (bod), 20)
-            pygame.display.flip()
+            
+        
+        pygame.display.flip()
 Okno
