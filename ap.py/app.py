@@ -6,7 +6,6 @@ import polohovani
 def pohyb(bile, cerne):
     vybrane = None
     kliknuti = 0
-    
     while True:   
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -14,23 +13,57 @@ def pohyb(bile, cerne):
                 return
             #první kliknutí(výběr figurky)
             elif event.type == pygame.MOUSEBUTTONDOWN and kliknuti == 0:
+                x = 0
                 pos = pygame.mouse.get_pos()
                 rada = polohovani.shoda(int(pos[0]),int(pos[1]))
                 zaznam = sdilene_polozky.databaze
-                for circle in bile + cerne:
+                prv_vyb = zaznam[-1]
+                print(zaznam[-1])               
+                
+                for policko in sdilene_polozky.bile:
+                    if policko == prv_vyb:
+                        print(sdilene_polozky.bile)
+                        poradi_vrch = x
+                        print(poradi_vrch)
+                        break
+                    x += 1
+                x = 0
+
+                for policko in sdilene_polozky.cerne:
+                    if policko == prv_vyb:
+                        print(sdilene_polozky.cerne)
+                        poradi_vrch = x
+                        print(poradi_vrch)
+                        break
+                    x += 1
+                
+                for circle in bile:
                     if circle.collidepoint(zaznam[-1]):
+                        barva = 1
                         vybrane = circle
                         kolecko = pos
                         kliknuti = 1
                         break
+                      
+                for circle in cerne:
+                    if circle.collidepoint(zaznam[-1]):
+                        barva = 2
+                        vybrane = circle
+                        kolecko = pos
+                        kliknuti = 1
+                        break
+
             #druhé kliknutí(přesun figurky)
             elif event.type == pygame.MOUSEBUTTONDOWN and kliknuti != 0:
                 souradnice = pygame.mouse.get_pos()
                 #funkce na určení nového pole
-                print(zaznam)
                 prvni = polohovani.shoda(int(souradnice[0]),int(souradnice[1]))
-                databaze_zaznamu = sdilene_polozky.databaze
-                print(databaze_zaznamu)
+                if prvni in sdilene_polozky.bile:
+                    barva_v = 1
+                elif prvni in sdilene_polozky.cerne:
+                    barva_v = 2
+                else:
+                    barva_v = barva
                 if vybrane:
                     pos = prvni
                     while pos in sdilene_polozky.databaze:
@@ -44,13 +77,19 @@ def pohyb(bile, cerne):
                                 prvni[1]+= poradi*40
                             else:
                                 prvni[1]-= poradi*40    
-                            pos = prvni
+                            pos = [int(prvni[0]),int(prvni[1])]
                             if pos in sdilene_polozky.databaze:
                                 break
-                    if pos != None:
+                    if pos != None and barva == barva_v:
                         zaznam.pop(-1)
                         sdilene_polozky.databaze.append(pos)
                         vybrane.center = pos
+                        if barva == 1:
+                            sdilene_polozky.bile.pop(poradi_vrch)
+                            sdilene_polozky.bile.append(pos)
+                        if barva == 2:
+                            sdilene_polozky.cerne.pop(poradi_vrch)
+                            sdilene_polozky.cerne.append(pos)
                     vybrane = None
                     kliknuti = 0
                     
@@ -66,11 +105,9 @@ pygame.init()
 window = pygame.display.set_mode((800, 600))
 hodnota = [0,0]
 pozadi = pygame.image.load("bg.png")
-bile =[(690,50),(690,90),(110,50),(110,90),(110,130),(110,170),(110,210),(305,540),(305,500),(305,460),(440,540),(440,500),(440,460),(440,420),(440,380)]
-cerne =[(690,540),(690,500),(110,540),(110,500),(110,460),(110,420),(110,380),(305,50),(305,90),(305,130),(440,50),(440,90),(440,130),(440,170),(440,210)]
 pozadovane = [[]]
-bile_circles = [pygame.Rect(bod[0]-15, bod[1]-15, 40, 40) for bod in bile]
-cerne_circles = [pygame.Rect(bod[0]-15, bod[1]-15, 40, 40) for bod in cerne]
+bile_circles = [pygame.Rect(bod[0]-15, bod[1]-15, 40, 40) for bod in sdilene_polozky.bile]
+cerne_circles = [pygame.Rect(bod[0]-15, bod[1]-15, 40, 40) for bod in sdilene_polozky.cerne]
 window.blit(pozadi, (0, 0))
 pygame.display.flip()
 

@@ -1,6 +1,7 @@
 import sdilene_polozky
-        #76-135 = 1
+
 def shoda(poloha_x,poloha_y):
+
         if poloha_y < 300:
                 if 85 <= poloha_x <= 135:
                         prvni = [109,50]
